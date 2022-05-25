@@ -10,7 +10,7 @@ import type {
   } from "@remix-run/react";
   
   import { db } from "~/utils/db.server";
-  import { login } from "~/utils/session.server";
+  import { createUserSession, login } from "~/utils/session.server";
   import stylesUrl from "~/styles/login.css";
   
   export const links: LinksFunction = () => {
@@ -93,10 +93,7 @@ import type {
           formError: `Username/Password combination is incorrect`,
         });
       }
-        return badRequest({
-          fields,
-          formError: "Not implemented",
-        });
+      return createUserSession(user.id, redirectTo);
       }
       case "register": {
         const userExists = await db.user.findFirst({
